@@ -1,0 +1,11 @@
+Set the parameters and data in the main.py script
+Use python 2.7
+Run with "python target.py"
+
+The program prints on screen:
+online score of the training data, loss on the training data, number of examples training, epoch
+
+Also, after each epoch, the program prints on screen:
+epoch, score on test data, loss on test data
+
+The program outputs a file containing all the weights, useful for the test script and might be used later on.
