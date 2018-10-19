@@ -9,3 +9,5 @@ Also, after each epoch, the program prints on screen:
 epoch, score on test data, loss on test data
 
 The program outputs a file containing all the weights, useful for the test script and might be used later on.
+
+DISCLAIMER: I take no responsability for the usage of all files and documentation provided. The use of the files is done at your own discretion and risk.
