@@ -103,9 +103,10 @@ for trials in range(epochs):
             for layer in range(len(net)-2,0,-1):
                 target[layer] = np.array([0.0]*net[layer])
                 
+                y_hat = y[layer+1][:]
                 for time_steps in range(period):
-                    target[layer] += -tau*np.dot(np.transpose(weights[layer]),(y[layer+1] - target[layer+1])*map(fprime,x[layer+1]))
-                    y[layer+1] = map(f,np.dot(weights[layer],target[layer]))
+                    target[layer] += -tau*np.dot(np.transpose(weights[layer]),(y_hat - target[layer+1])*map(fprime,x[layer+1]))
+                    y_hat = map(f,np.dot(weights[layer],target[layer]))
                     
                 #compute gradients from the hidden layers
                 gradients[layer-1] += -np.outer((target[layer]-y[layer])*map(fprime,x[layer]),y[layer-1])
@@ -113,7 +114,7 @@ for trials in range(epochs):
         #update the learning parameters
         if batch_counter == mini_batch_size:
             for layer in range(0,len(net)-1):
-                momentum[layer] = momentum_rate*momentum[layer] - learning_rate*gradients[layer]/mini_batch_size
+                momentum[layer] = momentum_rate*momentum[layer] - (1.0-momentum_rate)*learning_rate*gradients[layer]/mini_batch_size
                 weights[layer] += momentum[layer]
             
             #reset batch counter and gradients
