@@ -46,9 +46,9 @@ weights=[]
 momentum=[]
 for layer in range(len(net)-1):
     if layer==0:
-        sigma=(12.0/(5.0*net[layer]))**0.5
+        sigma=(48.0/(35.0*net[layer]))**0.5
     else:
-        sigma=(8.0/(3.0*net[layer]))**0.5
+        sigma=(16.0/(11.0*net[layer]))**0.5
     momentum.append(np.zeros((net[layer+1],net[layer])))
     weights.append(np.random.normal(0.0,sigma,(net[layer+1],net[layer])))
 
