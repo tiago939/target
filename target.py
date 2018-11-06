@@ -23,7 +23,7 @@ period = main.network()[8]
 #activation function
 def f(z):
     if z>100.0:
-        return 1.0
+        return 2.0
     elif z<-100.0:
         return 0.0
     else:
@@ -35,10 +35,12 @@ def fprime(z):
 
 x=[] #input to each neuron
 y=[] #activation of each neuron
+yb=[]
 target=[] #target of each neuron
 for layer in range(len(net)):
     x.append(np.array([0.0]*net[layer]))
     y.append(np.array([0.0]*net[layer]))
+    yb.append(np.array([0.0]*net[layer]))
     target.append(np.array([0.0]*net[layer]))
 
 #initialize weights and momentum
@@ -85,7 +87,8 @@ for trials in range(epochs):
         y[0] = training_data[example]/norm
         for layer in range(1,len(net)):
             x[layer]=np.dot(weights[layer-1],y[layer-1])
-            y[layer]=map(f,x[layer])
+            y[layer]=map(f,x[layer]+yb[layer])
+            yb[layer]=y[layer][:]
         
         #guess the class from classifcation problem
         if hot_label == True:
@@ -99,18 +102,22 @@ for trials in range(epochs):
             gradient_output = (y[len(net)-1]-target[len(net)-1])*map(fprime,x[len(net)-1])
             gradients[len(net)-2] += np.outer(gradient_output,y[len(net)-2])
             
+            graph = open('score','w', 0)
             #compute targets for all hidden layers
+            
             for layer in range(len(net)-2,0,-1):
                 target[layer] = np.array([0.0]*net[layer])
-                
+                x_hat = x[layer+1][:]
                 y_hat = y[layer+1][:]
+                
                 for time_steps in range(period):
-                    target[layer] += -tau*np.dot(np.transpose(weights[layer]),(y_hat - target[layer+1])*map(fprime,x[layer+1]))
-                    y_hat = map(f,np.dot(weights[layer],target[layer]))
-                    
+                    target[layer] += -tau*np.dot(np.transpose(weights[layer]),(y[layer+1]-target[layer+1])*map(fprime,x_hat))
+                    x_hat = np.dot(weights[layer],target[layer])
+                    y_hat = map(f,x_hat)
+
                 #compute gradients from the hidden layers
                 gradients[layer-1] += -np.outer((target[layer]-y[layer])*map(fprime,x[layer]),y[layer-1])
-        
+                
         #update the learning parameters
         if batch_counter == mini_batch_size:
             for layer in range(0,len(net)-1):
