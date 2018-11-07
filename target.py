@@ -35,12 +35,10 @@ def fprime(z):
 
 x=[] #input to each neuron
 y=[] #activation of each neuron
-yb=[]
 target=[] #target of each neuron
 for layer in range(len(net)):
     x.append(np.array([0.0]*net[layer]))
     y.append(np.array([0.0]*net[layer]))
-    yb.append(np.array([0.0]*net[layer]))
     target.append(np.array([0.0]*net[layer]))
 
 #initialize weights and momentum
@@ -87,8 +85,7 @@ for trials in range(epochs):
         y[0] = training_data[example]/norm
         for layer in range(1,len(net)):
             x[layer]=np.dot(weights[layer-1],y[layer-1])
-            y[layer]=map(f,x[layer]+yb[layer])
-            yb[layer]=y[layer][:]
+            y[layer]=map(f,x[layer])
         
         #guess the class from classifcation problem
         if hot_label == True:
