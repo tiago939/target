@@ -23,7 +23,7 @@ period = main.network()[8]
 #activation function
 def f(z):
     if z>100.0:
-        return 2.0
+        return 1.0
     elif z<-100.0:
         return 0.0
     else:
