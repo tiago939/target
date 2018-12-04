@@ -108,7 +108,7 @@ for trials in range(epochs):
                 y_hat = y[layer+1][:]
                 
                 for time_steps in range(period):
-                    target[layer] += -tau*np.dot(np.transpose(weights[layer]),(y[layer+1]-target[layer+1])*map(fprime,x_hat))
+                    target[layer] += -tau*np.dot(np.transpose(weights[layer]),(y_hat[layer+1]-target[layer+1])*map(fprime,x_hat))
                     x_hat = np.dot(weights[layer],target[layer])
                     y_hat = map(f,x_hat)
 
